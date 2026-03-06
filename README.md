@@ -52,6 +52,27 @@ Instalación de FFmpeg según sistema:
 
 ## ⚙️ Configuración
 
+### Obtener credenciales de Telegram
+
+Para usar el bot necesitas crear una aplicación en Telegram:
+
+1. Ve a [my.telegram.org](https://my.telegram.org) e inicia sesión con tu número de teléfono.
+2. Click en **"API Development Tools"**.
+3. Completa los datos:
+   - **App title**: Nombre de tu aplicación (ej: TikTok Downloader Bot)
+   - **Short name**: Nombre corto (ej: tiktokdl)
+   - **URL**: Tu repositorio o sitio web (puede ser vacío)
+   - **Platform**: Mobile
+   - **Description**: Descripción breve (puedes poner "Bot para descargar videos")
+4. Click en **"Create application"**.
+5. Copia los valores:
+   - **api_id**: Es un número (ej: `1234567`)
+   - **api_hash**: Es una cadena larga de letras y números (ej: `a1b2c3d4e5f6...`)
+
+**⚠️ IMPORTANTE**: Nunca compartas tu `API_HASH`. Es equivalente a una contraseña.
+
+### Configurar variables de entorno
+
 Copia `.env.example` a `.env` y configura:
 
 ```env
