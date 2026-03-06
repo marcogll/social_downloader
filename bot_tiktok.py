@@ -38,7 +38,9 @@ try:
     GRUPO_DESTINO = int(os.getenv("GRUPO_DESTINO_TIKTOK"))
 
 except TypeError as e:
-    logger.error("❌ Faltan variables en el archivo .env o tienen un formato incorrecto.")
+    logger.error(
+        "❌ Faltan variables en el archivo .env o tienen un formato incorrecto."
+    )
     exit(1)
 
 # Crear carpeta de descargas si no existe
@@ -52,27 +54,35 @@ client = TelegramClient("sesion_tiktok", API_ID, API_HASH)
 # Regex para detectar cualquier enlace de TikTok (web o móvil)
 TIKTOK_REGEX = r"(https?://)?(www\.|vm\.|vt\.)?tiktok\.com/(@[\w.-]+/video/\d+|\w+)"
 
+
 def descargar_tiktok(url, carpeta_salida):
     """
-    Descarga el video usando yt-dlp. 
+    Descarga el video usando yt-dlp.
     Por defecto para TikTok, yt-dlp extrae el video SIN marca de agua y SIN el final animado.
     """
     ydl_opts = {
-        "format": "best[ext=mp4]/best",
+        "format": "bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best",
         "outtmpl": f"{carpeta_salida}/%(id)s.%(ext)s",
         "quiet": True,
         "no_warnings": True,
+        "format_sort": ["res:2160", "res:1440", "res:1080", "res:720", "br"],
+        "merge_output_format": "mp4",
     }
 
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
         info_dict = ydl.extract_info(url, download=True)
         archivo = ydl.prepare_filename(info_dict)
-        
+
         # Extraer el título y limitarlo a 90 caracteres para evitar errores en Telegram
         titulo_completo = info_dict.get("title", "TikTok Video").strip()
-        titulo = titulo_completo[:90] + "..." if len(titulo_completo) > 90 else titulo_completo
-        
+        titulo = (
+            titulo_completo[:90] + "..."
+            if len(titulo_completo) > 90
+            else titulo_completo
+        )
+
         return archivo, titulo
+
 
 async def limpiar_carpeta_periodicamente():
     """Elimina videos locales más antiguos que CLEANUP_HOURS para liberar espacio"""
@@ -87,11 +97,14 @@ async def limpiar_carpeta_periodicamente():
                 if fecha_modificacion < ahora - tiempo_limite:
                     try:
                         os.remove(file_path)
-                        logger.info(f"🗑️ Archivo eliminado por antigüedad (+{CLEANUP_HOURS}h): {filename}")
+                        logger.info(
+                            f"🗑️ Archivo eliminado por antigüedad (+{CLEANUP_HOURS}h): {filename}"
+                        )
                     except Exception as e:
                         logger.error(f"No se pudo eliminar {filename}: {e}")
 
         await asyncio.sleep(3600)
+
 
 async def auto_actualizar_ytdlp():
     """Actualiza yt-dlp en segundo plano cada 24h para no perder compatibilidad con TikTok"""
@@ -105,14 +118,20 @@ async def auto_actualizar_ytdlp():
                 text=True,
             )
 
-            if "Requirement already satisfied" in resultado.stdout and "Successfully installed" not in resultado.stdout:
+            if (
+                "Requirement already satisfied" in resultado.stdout
+                and "Successfully installed" not in resultado.stdout
+            ):
                 logger.info("⚡ yt-dlp ya está en su última versión.")
             else:
-                logger.info("✅ ¡Nueva versión de yt-dlp instalada! Reiniciando el bot...")
+                logger.info(
+                    "✅ ¡Nueva versión de yt-dlp instalada! Reiniciando el bot..."
+                )
                 os.execv(sys.executable, [sys.executable] + sys.argv)
 
         except Exception as e:
             logger.error(f"❌ Error actualizando yt-dlp: {e}")
+
 
 @client.on(events.NewMessage(chats=GRUPO_DESTINO))
 async def manejador_tiktok(event):
@@ -125,7 +144,9 @@ async def manejador_tiktok(event):
     if match:
         url = match.group(0)
         logger.info(f"🔗 Enlace detectado de {event.sender_id}: {url}")
-        mensaje_estado = await event.reply("⏳ Descargando TikTok (Sin marca de agua)...")
+        mensaje_estado = await event.reply(
+            "⏳ Descargando TikTok (Sin marca de agua)..."
+        )
 
         try:
             # Manejo de bucle asíncrono moderno (Python 3.14 compatible)
@@ -148,19 +169,23 @@ async def manejador_tiktok(event):
             logger.info("✅ TikTok subido exitosamente.")
 
         except Exception as e:
-            await mensaje_estado.edit(f"❌ Ocurrió un error al procesar el video:\n`{str(e)}`")
+            await mensaje_estado.edit(
+                f"❌ Ocurrió un error al procesar el video:\n`{str(e)}`"
+            )
             logger.error(f"Error procesando enlace {url}: {e}")
+
 
 async def main():
     await client.start(phone=PHONE)
 
     logger.info("🤖 Bot de TikTok iniciado correctamente.")
     logger.info(f"🎯 Escuchando en el grupo: {GRUPO_DESTINO}")
-    
+
     asyncio.create_task(limpiar_carpeta_periodicamente())
     asyncio.create_task(auto_actualizar_ytdlp())
 
     await client.run_until_disconnected()
+
 
 if __name__ == "__main__":
     loop = asyncio.new_event_loop()
