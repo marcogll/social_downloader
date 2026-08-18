@@ -1,25 +1,39 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/marcogll/mg_data_storage/refs/heads/main/soul23/logo/soul23_logo.svg" width="110" alt="Soul23">
+  <a href="https://soul23.mx">
+    <picture>
+      <source
+        media="(prefers-color-scheme: dark)"
+        srcset="https://raw.githubusercontent.com/marcogll/mg_data_storage/refs/heads/main/soul23/logo/soul23_logo_wh.png">
+      <source
+        media="(prefers-color-scheme: light)"
+        srcset="https://raw.githubusercontent.com/marcogll/mg_data_storage/refs/heads/main/soul23/logo/soul23_logo_blk.png">
+      <img
+        src="https://raw.githubusercontent.com/marcogll/mg_data_storage/refs/heads/main/soul23/logo/soul23_logo_blk.png"
+        width="110"
+        alt="Soul:23">
+    </picture>
+  </a>
 </p>
 
-<h1 align="center">Tiktok Telegram</h1>
+<h1 align="center">TikTok Telegram</h1>
 
 <p align="center">
-  Bot automatizado para operaciones 🤖
+  Descarga videos de redes sociales (FB, IG, X, TikTok) con un bot de Telegram.
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Python-3a3a3a?style=flat-square&logo=python&logoColor=white" alt="Python">
-  <img src="https://img.shields.io/badge/Telegram-3a3a3a?style=flat-square&logo=telegram&logoColor=white" alt="Telegram">
+  <img src="https://img.shields.io/badge/Python-3a3a3a?style=flat-square&logo=python&logoColor=white">
+  <img src="https://img.shields.io/badge/Telegram-3a3a3a?style=flat-square&logo=telegram&logoColor=white">
+  <img src="https://img.shields.io/badge/yt-dlp-3a3a3a?style=flat-square&logo=youtube&logoColor=white">
 </p>
 
-  Bot automatizado para operaciones 🤖
-</p>
+---
 
-<p align="center">
-  <img src="https://img.shields.io/badge/Python-3a3a3a?style=flat-square&logo=python&logoColor=white" alt="Python">
-  <img src="https://img.shields.io/badge/Telegram-3a3a3a?style=flat-square&logo=telegram&logoColor=white" alt="Telegram">
-</p>
+## Description
+
+Bot de Telegram para descargar videos de redes sociales (Facebook, Instagram, X, TikTok): envía el enlace del video y recibe el archivo descargado, con configuración por variables de entorno.
+
+Python con python-telegram-bot y yt-dlp.
 
 ## ✨ Características Principales
 
